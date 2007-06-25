@@ -10,6 +10,7 @@ Source0:	http://download.berlios.de/zfs-fuse/%{name}-%{version}_%{snap}.tar.bz2
 URL:		http://www.wizy.org/wiki/ZFS_on_FUSE
 BuildRequires:	libfuse-devel
 BuildRequires:	scons
+ExclusiveArch:	%{ix86} %{x8664}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
