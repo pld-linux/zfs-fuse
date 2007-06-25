@@ -3,7 +3,7 @@ Name:		zfs-fuse
 %define	snap	beta1
 Version:	0.4.0
 Release:	0.%{snap}.1
-License:	GPL
+License:	CCDL 1.0
 Group:		Applications/Emulators
 Source0:	http://download.berlios.de/zfs-fuse/%{name}-%{version}_%{snap}.tar.bz2
 # Source0-md5:	994329d660aa5dce7429eaee86426010
