@@ -74,7 +74,8 @@ sed -i -e 's#-Werror##g' src/SConstruct
 cd src
 %scons \
 	%{!?debug:dist=1} \
-	CXXFLAGS="%{rpmcflags}"
+	CCFLAGS="%{rpmcflags}" \
+	CC="%{__cc}"
 
 %install
 rm -rf $RPM_BUILD_ROOT
