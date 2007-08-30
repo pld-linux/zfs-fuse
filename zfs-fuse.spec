@@ -45,7 +45,7 @@ zwykłych użytkowników końcowych do największych systemów
 korporacyjnych. Oto lista możliwości:
 - kontrolowana integralność - wszystkie dane (i metadane) mają
   obliczane sumy kontrole, które umożliwiają wykrywanie błędów
-  sprzętowych (uszkodzeń twardych dysków, niewnych kabli IDE).
+  sprzętowych (uszkodzeń twardych dysków, niesprawnych kabli IDE).
 - atomowe uaktualnienia - stan na dysku zawsze jest spójny, nie
   ma potrzeby wykonywania długiego sprawdzania systemu plików po
   wymuszonych rebootach czy utracie zasilania.
