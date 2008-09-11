@@ -1,5 +1,5 @@
 %define	snap	beta1
-%define date	20080629
+%define date	20080911
 Summary:	ZFS Filesystem for FUSE/Linux
 Summary(pl.UTF-8):	System plików ZFS dla Linuksa z FUSE
 Name:		zfs-fuse
@@ -8,8 +8,8 @@ Release:	0.%{snap}.%{date}.1
 License:	CCDL 1.0
 Group:		Applications/Emulators
 #Source0:	http://download.berlios.de/zfs-fuse/%{name}-%{version}_%{snap}.tar.bz2
-Source0:	%{name}-%{date}.tar.bz2
-# Source0-md5:	c46e0739446d8d2ea586a78f056e38af
+Source0:	%{name}-%{date}.tar.gz
+# Source0-md5:	cf12296c2bc13d8f558393eee555d564
 URL:		http://www.wizy.org/wiki/ZFS_on_FUSE
 BuildRequires:	libaio-devel
 BuildRequires:	libfuse-devel
@@ -34,8 +34,8 @@ features:
 - Built-in (optional) compression
 - Highly scalable
 - Pooled storage model - creating filesystems is as easy as creating a
-  new directory. You can efficiently have thousands of filesystems,
-  each with it's own quotas and reservations, and different properties
+  new directory. You can efficiently have thousands of filesystems, each
+  with it's own quotas and reservations, and different properties
   (compression algorithm, checksum algorithm, etc..).
 - Built-in stripes (RAID-0), mirrors (RAID-1) and RAID-Z (it's like
   software RAID-5, but more efficient due to ZFS's copy-on-write
@@ -49,17 +49,17 @@ korporacyjnych. Oto lista możliwości:
 - kontrolowana integralność - wszystkie dane (i metadane) mają
   obliczane sumy kontrole, które umożliwiają wykrywanie błędów
   sprzętowych (uszkodzeń twardych dysków, niesprawnych kabli IDE).
-- atomowe uaktualnienia - stan na dysku zawsze jest spójny, nie
-  ma potrzeby wykonywania długiego sprawdzania systemu plików po
+- atomowe uaktualnienia - stan na dysku zawsze jest spójny, nie ma
+  potrzeby wykonywania długiego sprawdzania systemu plików po
   wymuszonych rebootach czy utracie zasilania.
 - natychmiastowe migawki i kopie - można mieć godzinne, dzienne i
-  tygodniowe kopie zapasowe w sposób wydajny, a także eksperymentować
-  z nowymi konfiguracjami systemu plików bez żadnego ryzyka.
+  tygodniowe kopie zapasowe w sposób wydajny, a także eksperymentować z
+  nowymi konfiguracjami systemu plików bez żadnego ryzyka.
 - wbudowana (opcjonalna) kompresja
 - duża skalowalność
 - model przechowywania danych oparty na pulach - tworzenie systemu
-  plików jest tak łatwe, jak utworzenie nowego katalogu. Można w
-  sposób wydajny mieć tysiące systemów plików, każdy z nich z własnymi
+  plików jest tak łatwe, jak utworzenie nowego katalogu. Można w sposób
+  wydajny mieć tysiące systemów plików, każdy z nich z własnymi
   ograniczeniami (quotą) i rezerwacjami oraz różnymi właściwościami
   (algorytmem kompresji, algorytmem sum kontrolnych itp.).
 - wbudowany RAID-0 (striping), RAID-1 (mirroring) i RAID-Z (podobny do
