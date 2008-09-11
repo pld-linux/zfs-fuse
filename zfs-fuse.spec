@@ -1,4 +1,4 @@
-%define	snap	beta1
+%define	snap	beta2
 %define date	20080911
 Summary:	ZFS Filesystem for FUSE/Linux
 Summary(pl.UTF-8):	System plików ZFS dla Linuksa z FUSE
