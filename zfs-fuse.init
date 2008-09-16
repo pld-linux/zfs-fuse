@@ -43,24 +43,24 @@ condrestart() {
 RETVAL=0
 case "$1" in
   start)
-        start
-        ;;
-  stop)
-        stop
-        ;;
-  restart)
-        stop
 	start
-        ;;
+	;;
+  stop)
+	stop
+	;;
+  restart)
+	stop
+	start
+	;;
   try-restart)
 	condrestart 0
 	;;
   status)
-        status zfs-fuse
-        ;;
+	status zfs-fuse
+	;;
   *)
-        msg_usage "$0 {start|stop|restart|try-restart|status}"
-        exit 3
+	msg_usage "$0 {start|stop|restart|try-restart|status}"
+	exit 3
 esac
 
 exit $RETVAL
