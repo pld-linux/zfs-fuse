@@ -1,0 +1,66 @@
+#!/bin/sh
+#
+# chkconfig:   345 90 88
+# description: Start the zfs-fuse daemon
+# kernel developers.
+# processname: zfs-fuse
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+start() {
+	if [ ! -f /var/lock/subsys/zfs-fuse ]; then
+		umask 077
+		msg_starting zfs-fuse
+		daemon zfs-fuse
+		RETVAL=$?
+		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/zfs-fuse
+	else
+		msg_already_running zfs-fuse
+	fi
+}
+
+stop() {
+	if [ -f /var/lock/subsys/zfs-fuse ]; then
+		msg_stopping zfs-fuse
+		killproc zfs-fuse
+		rm -f /var/lock/subsys/zfs-fuse
+	else
+		msg_not_running zfs-fuse
+	fi
+}
+
+condrestart() {
+	if [ -f /var/lock/subsys/zfs-fuse ]; then
+		stop
+		start
+	else
+		msg_not_running zfs-fuse
+		RETVAL=$1
+	fi
+}
+
+RETVAL=0
+case "$1" in
+  start)
+        start
+        ;;
+  stop)
+        stop
+        ;;
+  restart)
+        stop
+	start
+        ;;
+  try-restart)
+	condrestart 0
+	;;
+  status)
+        status zfs-fuse
+        ;;
+  *)
+        msg_usage "$0 {start|stop|restart|try-restart|status}"
+        exit 3
+esac
+
+exit $RETVAL
