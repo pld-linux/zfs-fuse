@@ -7,6 +7,7 @@ License:	CCDL 1.0
 Group:		Applications/Emulators
 Source0:	http://download.berlios.de/zfs-fuse/%{name}-%{version}.tar.bz2
 # Source0-md5:	46d6bd429d6d9ddd57e078f5f22fa1cd
+Source1:	%{name}.init
 URL:		http://www.wizy.org/wiki/ZFS_on_FUSE
 BuildRequires:	libaio-devel
 BuildRequires:	libfuse-devel
@@ -84,10 +85,24 @@ cd src
 %scons install \
 	install_dir=$RPM_BUILD_ROOT%{_bindir}
 
+install -d $RPM_BUILD_ROOT/etc/rc.d/init.d
+install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/zfs-fuse
+
 %clean
 rm -rf $RPM_BUILD_ROOT
+
+%post
+/sbin/chkconfig --add %{name}
+%service %{name} restart
+
+%preun
+if [ "$1" = "0" ]; then
+%service -q %{name} stop
+/sbin/chkconfig --del %{name}
+fi
 
 %files
 %defattr(644,root,root,755)
 %doc BUGS CHANGES HACKING INSTALL LICENSE README STATUS TESTING TODO
+%attr(754,root,root) /etc/rc.d/init.d/%{name}
 %attr(755,root,root) %{_bindir}/*
