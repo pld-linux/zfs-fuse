@@ -1,15 +1,12 @@
-%define	snap	beta2
-%define date	20080911
 Summary:	ZFS Filesystem for FUSE/Linux
 Summary(pl.UTF-8):	System plików ZFS dla Linuksa z FUSE
 Name:		zfs-fuse
-Version:	0.4.0
-Release:	0.%{snap}.%{date}.1
+Version:	0.5.0
+Release:	1
 License:	CCDL 1.0
 Group:		Applications/Emulators
-#Source0:	http://download.berlios.de/zfs-fuse/%{name}-%{version}_%{snap}.tar.bz2
-Source0:	%{name}-%{date}.tar.gz
-# Source0-md5:	cf12296c2bc13d8f558393eee555d564
+Source0:	http://download.berlios.de/zfs-fuse/%{name}-%{version}.tar.bz2
+# Source0-md5:	46d6bd429d6d9ddd57e078f5f22fa1cd
 URL:		http://www.wizy.org/wiki/ZFS_on_FUSE
 BuildRequires:	libaio-devel
 BuildRequires:	libfuse-devel
@@ -69,7 +66,7 @@ korporacyjnych. Oto lista możliwości:
   słowie...).
 
 %prep
-%setup -q -n %{name}
+%setup -q
 
 sed -i -e 's#-Werror##g' src/SConstruct
 
