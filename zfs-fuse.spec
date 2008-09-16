@@ -8,6 +8,7 @@ Group:		Applications/Emulators
 Source0:	http://download.berlios.de/zfs-fuse/%{name}-%{version}.tar.bz2
 # Source0-md5:	46d6bd429d6d9ddd57e078f5f22fa1cd
 Source1:	%{name}.init
+Patch0:		%{name}-ztest_path.patch
 URL:		http://www.wizy.org/wiki/ZFS_on_FUSE
 BuildRequires:	libaio-devel
 BuildRequires:	libfuse-devel
@@ -68,7 +69,7 @@ korporacyjnych. Oto lista możliwości:
 
 %prep
 %setup -q
-
+%patch0 -p1
 sed -i -e 's#-Werror##g' src/SConstruct
 
 %build
