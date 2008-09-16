@@ -1,0 +1,27 @@
+diff -ur zfs-fuse-0.5.0/src/cmd/ztest/runtest.sh zfs-fuse-0.5.0.new/src/cmd/ztest/runtest.sh
+--- zfs-fuse-0.5.0/src/cmd/ztest/runtest.sh	2008-09-13 03:37:59.000000000 +0200
++++ zfs-fuse-0.5.0.new/src/cmd/ztest/runtest.sh	2008-09-16 15:03:37.519702423 +0200
+@@ -3,5 +3,5 @@
+ echo "Start date: `date`"
+ #ZFS_DEBUG=on /usr/bin/time -v nice -n 20 ./ztest -V -T 86400 &> log.txt
+ #/usr/bin/time -v nice -n 20 ./ztest -V -T 86400
+-nice -n 20 ./ztest -V $* && echo Test successful
++nice -n 20 /usr/bin/ztest -V $* && echo Test successful
+ echo "End date: `date`"
+Tylko w zfs-fuse-0.5.0.new/src/cmd/ztest: runtest.sh~
+diff -ur zfs-fuse-0.5.0/src/cmd/ztest/ztest.c zfs-fuse-0.5.0.new/src/cmd/ztest/ztest.c
+--- zfs-fuse-0.5.0/src/cmd/ztest/ztest.c	2008-09-13 03:37:59.000000000 +0200
++++ zfs-fuse-0.5.0.new/src/cmd/ztest/ztest.c	2008-09-16 15:03:03.109323191 +0200
+@@ -2847,10 +2847,9 @@
+ 	char zbuf[1024];
+ 	FILE *fp;
+ 
+-	/* zfs-fuse: ztest is never installed, so zdb should be in ../zdb/ */
+ 	/* LINTED */
+ 	(void) sprintf(zdb,
+-	    "../zdb/zdb -bc%s%s -U /tmp/zpool.cache -O %s %s",
++	    "/usr/bin/zdb -bc%s%s -U /tmp/zpool.cache -O %s %s",
+ 	    zopt_verbose >= 3 ? "s" : "",
+ 	    zopt_verbose >= 4 ? "v" : "",
+ 	    ztest_random(2) == 0 ? "pre" : "post", pool);
+Tylko w zfs-fuse-0.5.0.new/src/cmd/ztest: ztest.c~
