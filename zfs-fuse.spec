@@ -1,16 +1,16 @@
 Summary:	ZFS Filesystem for FUSE/Linux
 Summary(pl.UTF-8):	System plików ZFS dla Linuksa z FUSE
 Name:		zfs-fuse
-Version:	0.5.0
-Release:	2
+Version:	0.6.9
+Release:	0.1
 License:	CCDL 1.0
 Group:		Applications/Emulators
-Source0:	http://download.berlios.de/zfs-fuse/%{name}-%{version}.tar.bz2
-# Source0-md5:	46d6bd429d6d9ddd57e078f5f22fa1cd
+Source0:	http://zfs-fuse.net/releases/%{version}/source-tar-ball
+# Source0-md5:	904cfc7d7bbb73735896637543c1049e
 Source1:	%{name}.init
 Patch0:		%{name}-ztest_path.patch
 Patch1:		%{name}-libzfs_build.patch
-URL:		http://www.wizy.org/wiki/ZFS_on_FUSE
+URL:		http://zfs-fuse.net/
 BuildRequires:	libaio-devel
 BuildRequires:	libfuse-devel
 BuildRequires:	rpmbuild(macros) >= 1.337
@@ -70,8 +70,8 @@ korporacyjnych. Oto lista możliwości:
 
 %prep
 %setup -q
-%patch0 -p1
-%patch1 -p1
+#%patch0 -p1
+#%patch1 -p1
 sed -i -e 's#-Werror##g' src/SConstruct
 
 %build
@@ -86,7 +86,9 @@ rm -rf $RPM_BUILD_ROOT
 
 cd src
 %scons install \
-	install_dir=$RPM_BUILD_ROOT%{_bindir}
+	install_dir=$RPM_BUILD_ROOT%{_bindir} \
+	man_dir=$RPM_BUILD_ROOT%{_mandir}/man8 \
+	cfg_dir=$RPM_BUILD_ROOT%{_sysconfdir}/zfs
 
 install -d $RPM_BUILD_ROOT/etc/rc.d/init.d
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/zfs-fuse
@@ -109,3 +111,5 @@ fi
 %doc BUGS CHANGES HACKING INSTALL LICENSE README STATUS TESTING TODO
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
 %attr(755,root,root) %{_bindir}/*
+%{_sysconfdir}/zfs/zfs_pool_alert
+%{_mandir}/man8/*8.*
