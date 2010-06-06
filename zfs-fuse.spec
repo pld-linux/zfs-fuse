@@ -9,7 +9,6 @@ Source0:	http://zfs-fuse.net/releases/%{version}/source-tar-ball
 # Source0-md5:	904cfc7d7bbb73735896637543c1049e
 Source1:	%{name}.init
 Patch0:		%{name}-ztest_path.patch
-Patch1:		%{name}-libzfs_build.patch
 URL:		http://zfs-fuse.net/
 BuildRequires:	libaio-devel
 BuildRequires:	libfuse-devel
@@ -71,7 +70,6 @@ korporacyjnych. Oto lista możliwości:
 %prep
 %setup -q
 #%patch0 -p1
-#%patch1 -p1
 sed -i -e 's#-Werror##g' src/SConstruct
 
 %build
