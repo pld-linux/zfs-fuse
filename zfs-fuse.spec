@@ -2,13 +2,14 @@ Summary:	ZFS Filesystem for FUSE/Linux
 Summary(pl.UTF-8):	System plików ZFS dla Linuksa z FUSE
 Name:		zfs-fuse
 Version:	0.5.0
-Release:	1
+Release:	2
 License:	CCDL 1.0
 Group:		Applications/Emulators
 Source0:	http://download.berlios.de/zfs-fuse/%{name}-%{version}.tar.bz2
 # Source0-md5:	46d6bd429d6d9ddd57e078f5f22fa1cd
 Source1:	%{name}.init
 Patch0:		%{name}-ztest_path.patch
+Patch1:		%{name}-libzfs_build.patch
 URL:		http://www.wizy.org/wiki/ZFS_on_FUSE
 BuildRequires:	libaio-devel
 BuildRequires:	libfuse-devel
@@ -70,6 +71,7 @@ korporacyjnych. Oto lista możliwości:
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p1
 sed -i -e 's#-Werror##g' src/SConstruct
 
 %build
