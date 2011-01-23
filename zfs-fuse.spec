@@ -15,6 +15,7 @@ BuildRequires:	libaio-devel
 BuildRequires:	libfuse-devel
 BuildRequires:	rpmbuild(macros) >= 1.337
 BuildRequires:	scons
+BuildRequires:	zlib-devel
 ExclusiveArch:	%{ix86} %{x8664}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
