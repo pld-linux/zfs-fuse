@@ -17,6 +17,7 @@ Patch3:		%{name}-tirpc.patch
 Patch4:		%{name}-format.patch
 Patch5:		%{name}-common.patch
 Patch6:		%{name}-xattr.patch
+Patch7:		%{name}-x32.patch
 URL:		https://github.com/gordan-bobic/zfs-fuse
 # also (but no tags)
 #URL:		https://github.com/zfs-fuse/zfs-fuse
@@ -27,7 +28,7 @@ BuildRequires:	libtirpc-devel
 BuildRequires:	rpmbuild(macros) >= 1.337
 BuildRequires:	scons
 BuildRequires:	zlib-devel
-ExclusiveArch:	%{ix86} %{x8664}
+ExclusiveArch:	%{ix86} %{x8664} x32 sparc sparcv9 sparc64 ppc ppc64 armel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -89,6 +90,7 @@ korporacyjnych. Oto lista możliwości:
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
+%patch7 -p1
 
 %build
 cd src

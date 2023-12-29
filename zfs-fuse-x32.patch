@@ -1,0 +1,31 @@
+--- zfs-fuse-0.7.2.2/src/lib/libsolcompat/include/sys/isa_defs.h.orig	2015-11-24 17:32:31.000000000 +0100
++++ zfs-fuse-0.7.2.2/src/lib/libsolcompat/include/sys/isa_defs.h	2023-12-29 22:00:13.162078148 +0100
+@@ -241,13 +241,18 @@ extern "C" {
+ #define	_INT_ALIGNMENT			4
+ #define	_FLOAT_ALIGNMENT		4
+ #define	_FLOAT_COMPLEX_ALIGNMENT	4
++#ifdef _ILP32
++#define	_LONG_ALIGNMENT			4
++#define	_POINTER_ALIGNMENT		4
++#else
+ #define	_LONG_ALIGNMENT			8
++#define	_POINTER_ALIGNMENT		8
++#endif
+ #define	_LONG_LONG_ALIGNMENT		8
+ #define	_DOUBLE_ALIGNMENT		8
+ #define	_DOUBLE_COMPLEX_ALIGNMENT	8
+ #define	_LONG_DOUBLE_ALIGNMENT		16
+ #define	_LONG_DOUBLE_COMPLEX_ALIGNMENT	16
+-#define	_POINTER_ALIGNMENT		8
+ #define	_MAX_ALIGNMENT			16
+ #define	_ALIGNMENT_REQUIRED		1
+ 
+@@ -259,7 +264,7 @@ extern "C" {
+ /*
+  * Define the appropriate "implementation choices".
+  */
+-#if !defined(_LP64)
++#if !defined(_LP64) && !defined(_ILP32)
+ #define	_LP64
+ #endif
+ #if !defined(_I32LPx) && defined(_KERNEL)
