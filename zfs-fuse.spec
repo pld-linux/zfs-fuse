@@ -1,18 +1,29 @@
+# TODO: systemd units, scrub script
 Summary:	ZFS Filesystem for FUSE/Linux
 Summary(pl.UTF-8):	System plików ZFS dla Linuksa z FUSE
 Name:		zfs-fuse
-Version:	0.5.0
-Release:	2
-License:	CCDL 1.0
-Group:		Applications/Emulators
-Source0:	http://download.berlios.de/zfs-fuse/%{name}-%{version}.tar.bz2
-# Source0-md5:	46d6bd429d6d9ddd57e078f5f22fa1cd
+Version:	0.7.2.2
+Release:	1
+License:	CCDL v1.0
+Group:		Applications/File
+#Source0Download: https://github.com/gordan-bobic/zfs-fuse/releases
+Source0:	https://github.com/gordan-bobic/zfs-fuse/archive/%{version}/%{name}-%{version}.tar.gz
+# Source0-md5:	8590a93698ada698586cf3215f3be7e6
 Source1:	%{name}.init
 Patch0:		%{name}-ztest_path.patch
-Patch1:		%{name}-libzfs_build.patch
-URL:		http://www.wizy.org/wiki/ZFS_on_FUSE
+Patch1:		%{name}-opt.patch
+Patch2:		%{name}-python3.patch
+Patch3:		%{name}-tirpc.patch
+Patch4:		%{name}-format.patch
+Patch5:		%{name}-common.patch
+Patch6:		%{name}-xattr.patch
+URL:		https://github.com/gordan-bobic/zfs-fuse
+# also (but no tags)
+#URL:		https://github.com/zfs-fuse/zfs-fuse
+BuildRequires:	glibc-devel >= 6:2.3.4
 BuildRequires:	libaio-devel
-BuildRequires:	libfuse-devel
+BuildRequires:	libfuse-devel >= 2.6.0
+BuildRequires:	libtirpc-devel
 BuildRequires:	rpmbuild(macros) >= 1.337
 BuildRequires:	scons
 BuildRequires:	zlib-devel
@@ -73,24 +84,38 @@ korporacyjnych. Oto lista możliwości:
 %setup -q
 %patch0 -p1
 %patch1 -p1
-sed -i -e 's#-Werror##g' src/SConstruct
+%patch2 -p1
+%patch3 -p1
+%patch4 -p1
+%patch5 -p1
+%patch6 -p1
 
 %build
 cd src
+CC="%{__cc}" \
+CFLAGS="%{rpmcflags} -DNDEBUG" \
 %scons \
-	%{!?debug:dist=1} \
-	CCFLAGS="%{rpmcflags}" \
-	CC="%{__cc}"
+	%{!?debug:dist=1}
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
 cd src
+CC="%{__cc}" \
+CFLAGS="%{rpmcflags} -DNDEBUG" \
 %scons install \
-	install_dir=$RPM_BUILD_ROOT%{_bindir}
+	cfg_dir=$RPM_BUILD_ROOT%{_sysconfdir}/zfs-fuse \
+	install_dir=$RPM_BUILD_ROOT%{_bindir} \
+	man_dir=$RPM_BUILD_ROOT%{_mandir}/man8
+cd ..
 
 install -d $RPM_BUILD_ROOT/etc/rc.d/init.d
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/zfs-fuse
+
+install -d $RPM_BUILD_ROOT%{systemdunitdir}
+cp -p zfs-fuse*.service $RPM_BUILD_ROOT%{systemdunitdir}
+
+# TODO: zfs-fuse.modules-load zfs-fuse.scrub zfs-fuse.sysconfig zfsrc
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -107,6 +132,22 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc BUGS CHANGES HACKING INSTALL LICENSE README STATUS TESTING TODO
-%attr(754,root,root) /etc/rc.d/init.d/%{name}
-%attr(755,root,root) %{_bindir}/*
+%doc BUGS CHANGES LICENSE README README.NFS STATUS TESTING TODO
+%attr(755,root,root) %{_bindir}/mount.zfs
+%attr(755,root,root) %{_bindir}/zdb
+%attr(755,root,root) %{_bindir}/zfs
+%attr(755,root,root) %{_bindir}/zfs-fuse
+%attr(755,root,root) %{_bindir}/zpool
+%attr(755,root,root) %{_bindir}/zstreamdump
+%attr(755,root,root) %{_bindir}/ztest
+#%{systemdunitdir}/zfs-fuse.service
+#%{systemdunitdir}/zfs-fuse-oom.service
+#%{systemdunitdir}/zfs-fuse-pid.service
+%attr(754,root,root) /etc/rc.d/init.d/zfs-fuse
+%dir %{_sysconfdir}/zfs-fuse
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/zfs-fuse/zfs_pool_alert
+%{_mandir}/man8/zdb.8*
+%{_mandir}/man8/zfs-fuse.8*
+%{_mandir}/man8/zfs.8*
+%{_mandir}/man8/zpool.8*
+%{_mandir}/man8/zstreamdump.8*

@@ -1,0 +1,52 @@
+--- zfs-fuse-0.7.2.2/src/lib/libnvpair/libnvpair.c.orig	2015-11-24 17:32:31.000000000 +0100
++++ zfs-fuse-0.7.2.2/src/lib/libnvpair/libnvpair.c	2023-12-29 08:05:16.384204117 +0100
+@@ -123,7 +123,7 @@ struct nvlist_prtctl {
+ 			(void) DFLTPRTOP(pctl, type)(pctl, \
+ 			    DFLTPRTOPARG(pctl, type), nvl, name, val); \
+ 		} \
+-		(void) fprintf(pctl->nvprt_fp, pctl->nvprt_eomfmt); \
++		(void) fputs(pctl->nvprt_eomfmt, pctl->nvprt_fp); \
+ 	}
+ 
+ #define	ARENDER(pctl, type, nvl, name, arrp, count) \
+@@ -137,7 +137,7 @@ struct nvlist_prtctl {
+ 			(void) DFLTPRTOP(pctl, type)(pctl, \
+ 			    DFLTPRTOPARG(pctl, type), nvl, name, arrp, count); \
+ 		} \
+-		(void) fprintf(pctl->nvprt_fp, pctl->nvprt_eomfmt); \
++		(void) fputs(pctl->nvprt_eomfmt, pctl->nvprt_fp); \
+ 	}
+ 
+ static void nvlist_print_with_indent(nvlist_t *, nvlist_prtctl_t);
+@@ -210,7 +210,7 @@ NVLIST_PRTFUNC(int32, int32_t, int32_t,
+ NVLIST_PRTFUNC(uint32, uint32_t, uint32_t, "0x%x")
+ NVLIST_PRTFUNC(int64, int64_t, longlong_t, "%lld")
+ NVLIST_PRTFUNC(uint64, uint64_t, u_longlong_t, "0x%llx")
+-NVLIST_PRTFUNC(double, double, double, "0x%llf")
++NVLIST_PRTFUNC(double, double, double, "0x%lf")
+ NVLIST_PRTFUNC(string, char *, char *, "%s")
+ NVLIST_PRTFUNC(hrtime, hrtime_t, hrtime_t, "0x%llx")
+ 
+@@ -235,7 +235,7 @@ nvaprint_##type_and_variant(nvlist_prtct
+ 				(void) fprintf(fp, "[%d]: ", i); \
+ 		} \
+ 		if (i != 0) \
+-			(void) fprintf(fp, pctl->nvprt_btwnarrfmt); \
++			(void) fputs(pctl->nvprt_btwnarrfmt, fp); \
+ 		(void) fprintf(fp, vfmt, (ptype)valuep[i]); \
+ 	} \
+ 	return (1); \
+@@ -394,11 +394,11 @@ nvlist_prtctl_dofmt(nvlist_prtctl_t pctl
+ 		break;
+ 
+ 	case NVLIST_FMT_MEMBER_POSTAMBLE:
+-		(void) fprintf(fp, pctl->nvprt_eomfmt);
++		(void) fputs(pctl->nvprt_eomfmt, fp);
+ 		break;
+ 
+ 	case NVLIST_FMT_BTWN_ARRAY:
+-		(void) fprintf(fp, pctl->nvprt_btwnarrfmt); \
++		(void) fputs(pctl->nvprt_btwnarrfmt, fp);
+ 		break;
+ 
+ 	default:

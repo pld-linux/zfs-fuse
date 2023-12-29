@@ -1,0 +1,115 @@
+--- zfs-fuse-0.7.2.2/src/lib/libsolcompat/include/sys/utsname.h.orig	2015-11-24 17:32:31.000000000 +0100
++++ zfs-fuse-0.7.2.2/src/lib/libsolcompat/include/sys/utsname.h	2023-12-29 09:24:24.788479802 +0100
+@@ -29,7 +29,7 @@
+ 
+ #include_next <sys/utsname.h>
+ 
+-struct utsname utsname;
++extern struct utsname utsname;
+ 
+ #endif
+ 
+--- zfs-fuse-0.7.2.2/src/lib/libzfs/libzfs_zfsfuse.c.orig	2015-11-24 17:32:31.000000000 +0100
++++ zfs-fuse-0.7.2.2/src/lib/libzfs/libzfs_zfsfuse.c	2023-12-29 15:50:50.216206888 +0100
+@@ -37,8 +37,6 @@
+ 
+ #include "libzfs_impl.h"
+ 
+-int aok=0;
+-
+ int zfsfuse_open(const char *pathname, int flags)
+ {
+ 	struct sockaddr_un name;
+--- zfs-fuse-0.7.2.2/src/cmd/zpool/zpool_util.h.orig	2015-11-24 17:32:31.000000000 +0100
++++ zfs-fuse-0.7.2.2/src/cmd/zpool/zpool_util.h	2023-12-29 15:55:50.017916056 +0100
+@@ -63,7 +63,7 @@ void pool_list_free(zpool_list_t *);
+ int pool_list_count(zpool_list_t *);
+ void pool_list_remove(zpool_list_t *, zpool_handle_t *);
+ 
+-libzfs_handle_t *g_zfs;
++extern libzfs_handle_t *g_zfs;
+ 
+ #ifdef	__cplusplus
+ }
+--- zfs-fuse-0.7.2.2/src/cmd/zfs/zfs_util.h.orig	2015-11-24 17:32:31.000000000 +0100
++++ zfs-fuse-0.7.2.2/src/cmd/zfs/zfs_util.h	2023-12-29 15:56:07.287822497 +0100
+@@ -34,7 +34,7 @@ extern "C" {
+ 
+ void * safe_malloc(size_t size);
+ void nomem(void);
+-libzfs_handle_t *g_zfs;
++extern libzfs_handle_t *g_zfs;
+ 
+ #ifdef	__cplusplus
+ }
+--- zfs-fuse-0.7.2.2/src/cmd/zpool/zpool_main.c.orig	2015-11-24 17:32:31.000000000 +0100
++++ zfs-fuse-0.7.2.2/src/cmd/zpool/zpool_main.c	2023-12-29 15:58:29.293719852 +0100
+@@ -53,6 +53,8 @@
+ #include "statcommon.h"
+ #include "format.h"
+ 
++libzfs_handle_t *g_zfs;
++
+ static int zpool_do_create(int, char **);
+ static int zpool_do_destroy(int, char **);
+ 
+--- zfs-fuse-0.7.2.2/src/lib/libsolkerncompat/main.c.orig	2015-11-24 17:32:31.000000000 +0100
++++ zfs-fuse-0.7.2.2/src/lib/libsolkerncompat/main.c	2023-12-29 17:29:41.574073964 +0100
+@@ -43,6 +43,7 @@ uint64_t physmem;
+ unsigned long _pagesize;
+ unsigned int _pageshift;
+ kmem_cache_t *vnode_cache;
++struct utsname utsname;
+ extern void system_taskq_init();
+ 
+ void libsolkerncompat_init()
+--- zfs-fuse-0.7.2.2/src/zfs-fuse/zfs_vnops.c.orig	2015-11-24 17:32:31.000000000 +0100
++++ zfs-fuse-0.7.2.2/src/zfs-fuse/zfs_vnops.c	2023-12-29 17:52:41.103267080 +0100
+@@ -5130,7 +5130,6 @@ zfs_isdir()
+ /*
+  * Directory vnode operations template
+  */
+-vnodeops_t *zfs_dvnodeops;
+ const fs_operation_def_t zfs_dvnodeops_template[] = {
+ 	VOPNAME_OPEN,		{ .vop_open = zfs_open },
+ 	VOPNAME_CLOSE,		{ .vop_close = zfs_close },
+@@ -5163,7 +5162,6 @@ const fs_operation_def_t zfs_dvnodeops_t
+ /*
+  * Regular file vnode operations template
+  */
+-vnodeops_t *zfs_fvnodeops;
+ const fs_operation_def_t zfs_fvnodeops_template[] = {
+ 	VOPNAME_OPEN,		{ .vop_open = zfs_open },
+ 	VOPNAME_CLOSE,		{ .vop_close = zfs_close },
+@@ -5198,7 +5196,6 @@ const fs_operation_def_t zfs_fvnodeops_t
+ /*
+  * Symbolic link vnode operations template
+  */
+-vnodeops_t *zfs_symvnodeops;
+ const fs_operation_def_t zfs_symvnodeops_template[] = {
+ 	VOPNAME_GETATTR,	{ .vop_getattr = zfs_getattr },
+ 	VOPNAME_SETATTR,	{ .vop_setattr = zfs_setattr },
+@@ -5216,7 +5213,6 @@ const fs_operation_def_t zfs_symvnodeops
+ /*
+  * special share hidden files vnode operations template
+  */
+-vnodeops_t *zfs_sharevnodeops;
+ const fs_operation_def_t zfs_sharevnodeops_template[] = {
+ 	VOPNAME_GETATTR,	{ .vop_getattr = zfs_getattr },
+ 	VOPNAME_ACCESS,		{ .vop_access = zfs_access },
+@@ -5240,7 +5236,6 @@ const fs_operation_def_t zfs_sharevnodeo
+  *	zfs_link()	- no links into/out of attribute space
+  *	zfs_rename()	- no moves into/out of attribute space
+  */
+-vnodeops_t *zfs_xdvnodeops;
+ const fs_operation_def_t zfs_xdvnodeops_template[] = {
+ 	VOPNAME_OPEN,		{ .vop_open = zfs_open },
+ 	VOPNAME_CLOSE,		{ .vop_close = zfs_close },
+@@ -5271,7 +5266,6 @@ const fs_operation_def_t zfs_xdvnodeops_
+ /*
+  * Error vnode operations template
+  */
+-vnodeops_t *zfs_evnodeops;
+ const fs_operation_def_t zfs_evnodeops_template[] = {
+ 	VOPNAME_INACTIVE,	{ .vop_inactive = zfs_inactive },
+ 	VOPNAME_PATHCONF,	{ .vop_pathconf = zfs_pathconf },

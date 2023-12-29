@@ -7,17 +7,14 @@
 -nice -n 20 ./ztest -V $* && echo Test successful
 +nice -n 20 /usr/bin/ztest -V $* && echo Test successful
  echo "End date: `date`"
---- zfs-fuse-0.5.0/src/cmd/ztest/ztest.c	2008-09-13 03:37:59.000000000 +0200
-+++ zfs-fuse-0.5.0.new/src/cmd/ztest/ztest.c	2008-09-16 15:03:03.109323191 +0200
-@@ -2847,10 +2847,9 @@
- 	char zbuf[1024];
- 	FILE *fp;
+--- zfs-fuse-0.7.2.2/src/cmd/ztest/ztest.c.orig	2023-12-26 11:32:02.694533631 +0100
++++ zfs-fuse-0.7.2.2/src/cmd/ztest/ztest.c	2023-12-26 19:50:19.919233129 +0100
+@@ -4737,7 +4737,7 @@ ztest_run_zdb(char *pool)
+ 	FILE *fp;	
  
--	/* zfs-fuse: ztest is never installed, so zdb should be in ../zdb/ */
- 	/* LINTED */
- 	(void) sprintf(zdb,
--	    "../zdb/zdb -bc%s%s -U /tmp/zpool.cache -O %s %s",
-+	    "/usr/bin/zdb -bc%s%s -U /tmp/zpool.cache -O %s %s",
- 	    zopt_verbose >= 3 ? "s" : "",
- 	    zopt_verbose >= 4 ? "v" : "",
- 	    ztest_random(2) == 0 ? "pre" : "post", pool);
+  	(void) sprintf(zdb,
+-	    "../zdb/zdb -bc%s%s -U %s  %s",
++	    "/usr/bin/zdb -bc%s%s -U %s  %s",
+   	    zopt_verbose >= 3 ? "s" : "",
+   	    zopt_verbose >= 4 ? "v" : "",
+ 	    spa_config_path,
